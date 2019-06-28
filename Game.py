@@ -86,6 +86,7 @@ class shop:
                         del self.stock[choice-1],self.items[choice-1],self.prices[choice-1]
                 else:
                     print('You don\'t have enough gold!\n')
+                choice = 0
         print('Thanks for visiting!')
     def buy(self,item):
         global sword_type
@@ -110,7 +111,7 @@ class shop:
 #Functions
 def decision(options,message='What do you choose to do?'):
     for i in range(len(options)):
-        print(f'{i+1}){options[i]}')
+        print(f'{i+1}){options[i]}\n')
     try:
         if len(options) == 2:
             return int(input(f'{message} (1/2): '))
@@ -152,6 +153,7 @@ def battle(enemy):
                 restore = 150
                 potion_num = player.potionl
                 potion_type = 3 #Large
+            print('\n')
             if choice == 1:
                 if percent_chance(player.hit_chance):
                     enemy.damage(damage)
