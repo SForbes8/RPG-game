@@ -464,3 +464,4 @@ print('You are finally given your medal of bravery, and can now live the rest of
 sleep(3)
 print('\n\nThe end...')
 input('\n\n\n<To end the game, press enter>')
+#
