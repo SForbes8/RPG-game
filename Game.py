@@ -28,6 +28,14 @@ class orc(npc):
         self.crit_chance = 15
         self.dmg = 15
 
+class troll(npc):
+    def __init__(self):
+        self.type = 'troll'
+        self.hp = 200
+        self.hit_chance = 75
+        self.crit_chance = 5
+        self.dmg = 30
+
 class Player:
     def __init__(self):
         self.hp = 100
@@ -35,7 +43,7 @@ class Player:
         self.crit_chance = 10
         self.max_hp = 100
         self.gold = 0
-        self.potions = 1
+        self.potions = 2
         self.potionm = 0
         self.potionl = 0
     def damage(self,amount):
@@ -43,27 +51,54 @@ class Player:
 
 class shop:
     def __init__(self,list):
-        self.items = list[0:][0]
-        self.prices = list[0:][1]
-        self.stock = list[0:][2]
+        self.items =[]
+        self.prices = []
+        self.stock = []
+        for i in list:
+            self.items += [i[0]]
+            self.prices += [i[1]]
+            self.stock += [i[2]]
     def run(self):
-        print('You have {player.gold} gold.\n')
+        choice = 0
+        print(f'You have {player.gold} gold.\n')
         print('Welcome to the shop! Here you can buy:')
         while choice != len(self.items)+1:
+            self.txt = []
             for i in range(len(self.items)):
-                self.txt = [self.items[i]+': '+self.prices[i]+' gold ('+self.stock[i]+' in stock.)']
+                self.txt += [f'{self.items[i]}: {self.prices[i]} gold ({self.stock[i]} in stock.)']
             choice = decision(self.txt+['Nothing'],message='What do you want to buy?')
             if choice != len(self.items)+1: #If the choice isn't 'Nothing'
                 if self.prices[choice-1] <= player.gold:
                     print(f'Thank you for buying the {self.items[choice-1]}!')
                     self.stock[choice-1] -= 1
                     player.gold -= self.prices[choice-1]
-                    print('You have {player.gold} gold remaining.\n')
+                    self.buy(self.items[choice-1])
+                    print(f'You have {player.gold} gold remaining.\n')
                     if self.stock[choice-1] <= 0:
                         del self.stock[choice-1],self.items[choice-1],self.prices[choice-1]
                 else:
                     print('You don\'t have enough gold!\n')
         print('Thanks for visiting!')
+    def buy(self,item):
+        global sword_type
+        if item == 'small health potion (restores 50hp)':
+            player.potions += 1
+        elif item == 'medium health potion (restores 100hp)':
+            player.potionm += 1
+        elif item == 'large health potion (restores 150hp)':
+            player.potionl += 1
+        elif item == 'Iron armour':
+            player.max_hp = 150
+            print('Your max hp is now 150!')
+        elif item == 'Iron sword':
+            sword_type = 'iron sword'
+            print('Your sword now deals 18 damage!')
+        elif item == 'Steel armour':
+            player.max_hp = 225
+            print('Your max hp is now 225!')
+        elif item == 'Steel sword':
+            sword_type = 'steel sword'
+            print('Your sword now deals 27 damage!')
 #Functions
 def decision(options,message='What do you choose to do?'):
     for i in range(len(options)):
@@ -88,32 +123,48 @@ def battle(enemy):
             print(f'You have {player.hp} hp.')
             print(f'The {enemy.type} has {enemy.hp} hp.\n')
             success = False
-            choice = decision([f'Attack with your {sword_type}',f'Use {health_potion_type} ({player.potions} remaining)','Dodge before attacking'])
+            choice = decision([f'Attack with your {sword_type}',f'Use a small health potion ({player.potions} remaining)',f'Use a medium health potion ({player.potionm} remaining)',f'Use a large health potion ({player.potionl} remaining)','Dodge before attacking'])
             if sword_type == 'rusty sword':
                 damage = 12
             elif sword_type == 'iron sword':
                 damage = 18
             elif sword_type == 'steel sword':
                 damage = 27
-            if health_potion_type == 'small health potion (restores 50hp)':
+            if choice == 2:
                 restore = 50
+                potion_num = player.potions
+                potion_type = 1 #Small
+            elif choice == 3:
+                restore = 100
+                potion_num = player.potionm
+                potion_type = 2 #Medium
+            elif choice == 4:
+                restore = 150
+                potion_num = player.potionl
+                potion_type = 3 #Large
             if choice == 1:
                 if percent_chance(player.hit_chance):
                     enemy.damage(damage)
                     print(f'You dealt {damage} damage with your {sword_type}!')
                 else:
                     print('Oops! You missed...')
-            elif choice == 2:
-                if player.potions > 0:
+            elif choice >= 2 and choice <= 4:
+                if potion_num > 0:
                     oldhp = player.hp
                     player.hp += restore
                     if player.hp > player.max_hp:
                         player.hp = player.max_hp
-                    player.potions -= 1
-                    print(f'You restored {player.hp-oldhp} hp. You have {player.potions} left.')
+                    potion_num -= 1
+                    print(f'You restored {player.hp-oldhp} hp. You have {potion_num} left.')
+                    if potion_type == 1: #Small
+                        player.potions = potion_num
+                    elif potion_type == 2:
+                        player.potionm = potion_num
+                    elif potion_type == 3:
+                        player.potionl = potion_num
                 else:
                     print('You had no potions!')
-            elif choice == 3:
+            elif choice == 5:
                 success = percent_chance(40)
                 if success:
                     enemy.damage(damage)
@@ -122,7 +173,7 @@ def battle(enemy):
                     print('Your dodge failed...')
             input('\n')
             if not success and enemy.hp > 0:
-                if percent_chance(enemy.hit_chance) or choice == 34:
+                if percent_chance(enemy.hit_chance) or choice == 3:
                     player.damage(enemy.dmg)
                     print(f'\nThe {enemy.type} hit you and dealt {enemy.dmg} damage!')
                 else:
@@ -156,6 +207,19 @@ def battle(enemy):
             else: #20% chance of 60 gold
                 print('The orc dropped 60 gold!')
                 player.gold += 60
+                print(f'\nYou now have {player.gold} gold!')
+        elif enemy.type == 'troll':
+            if gold_chance <= 60: #60% chance of 45 gold
+                print('The troll dropped 45 gold!')
+                player.gold += 45
+                print(f'\nYou now have {player.gold} gold!')
+            elif gold_chance <= 90: #30% chance of 60 gold
+                print('The troll dropped 60 gold!')
+                player.gold += 60
+                print(f'\nYou now have {player.gold} gold!')
+            else: #10% chance of 90 gold
+                print('The troll dropped 90 gold!')
+                player.gold += 90
                 print(f'\nYou now have {player.gold} gold!')
 #Imports/Dependencies
 from time import sleep
@@ -192,7 +256,7 @@ else:
     input()
 print('Before you re-infiltrate the city, many of the locals have come to wish you and your soldiers luck.')
 print('The blacksmith comes up to you and offers:')
-choice = decision(['His best armour or','His best sword.'],message='Which option to you choose?')
+choice = decision(['His best armour or','His best sword.'],message='Which option do you choose?')
 if choice == 1:
     print('You accepted the Iron Armour! Your max hp is now 150!')
     player.max_hp += 50
@@ -242,14 +306,84 @@ else:
 print('You continue on to Laton village for supplies.')
 #Arrival at Laton Village
 sleep(4)
-print('You arrive at Laton Village.')
+print('You arrive at Laton Village. You and you\'re soldiers rest up and plan to visit the trader in the morning.')
+sleep(3)
 choice = 0
+if player.max_hp == 150:
+    not_yet_got = 'Iron sword'
+else:
+    not_yet_got = 'Iron armour'
+laton_shop = shop([['small health potion (restores 50hp)',20,2],['medium health potion (restores 100hp)',30,1],[f'{not_yet_got}',50,1]])
 while choice != 3:
     print('There is an Orc guarding the exit to the village. You can:')
-    laton_shop = shop([['small health potion (restores 50hp)',20,2],['medium health potion (restores 100hp)',30,1],[f'Iron {not_yet_got}',50,1]])
     choice = decision(['Look around','Visit the shop','Fight the orc to leave'])
     if choice == 1:
-        #Sidequests
+        #Sidequests - NOT MVP
         pass
     elif choice == 2:
         laton_shop.run()
+print('You approach the orc protecting the exit to Laton Village. It sees you and immediately attacks!')
+orc1 = orc()
+battle(orc1)
+sleep(3)
+print('Now that the Orc is defeated, the potion maker of the village offers to refill you health!')
+player.hp = player.max_hp
+sleep(2)
+print('You continue on your journey to Osiris City.')
+sleep(4)
+print('As you approach Osiris City, you see a ceremony going on. There are too many guards to take on, so you take a different way.')
+sleep(3)
+print('As you are treading the worn path, an Orc comes out of the forest on your left and lunges at you!')
+orc1 = orc()
+battle(orc1)
+print('You\'re worn out from the battle, but you keep on going.')
+print('You are approaching the other entrance to the city when you see a town in the distance.')
+sleep(4)
+print('Your soldiers decide to stop off at the town to resupply. It is called Tapio Town.')
+sleep(2)
+print('You arrive at Tapio town and browse the Blacksmith\'s wares.')
+blacksmith_shop = shop([['small health potion (restores 50hp)',15,3],['Steel sword',60,1],['Steel armour',60,1]])
+blacksmith_shop.run()
+print('\nThe blacksmith has heard about what why you are on this journey.')
+print('He gives you a large potion for free as good luck!')
+player.potionl += 1
+sleep(4)
+print('Everyone wishes you luck as you exit Tapio Town.')
+print('The town\'s potion maker restores all of your health!')
+player.hp = player.max_hp
+sleep(4)
+#SIDEQUEST - Caravan breakdown
+print('Alas, it is time, you arrive at the City of Osiris.')
+print('Night is beginning to fall, so there are many ways to proceed:')
+choice = decision(['Sneak in over the rooftops','Go through a back alley','Charge head-on down the street'])
+if choice == 1:
+    print('You sneak in over the rooftops, and make it to a hidden shop outside Sif Castle.')
+elif choice == 2:
+    print('You go through the back alley and encounter a goblin!')
+    sleep(2)
+    goblin1 = goblin()
+    battle(goblin1)
+    print('The noise got the attention of an orc!')
+    sleep(2)
+    orc1 = orc()
+    battle(orc1)
+    print('\nFinally, you make it to a hidden shop outside Sif Castle.')
+else:
+    print('You charge down the street and many enemies attack!')
+    battle(goblin())
+    battle(orc())
+    battle(goblin())
+    battle(troll())
+    print('\nYou reach the end of the street, and enter a hidden shop outside Sif Castle.')
+print('The shop is one of the places that the orcs are too stupid to find yet.')
+sleep(4)
+if sword_type == 'steel sword':
+    steel_sword_stock = 0
+else:
+    steel_sword_stock = 1
+if player.max_hp == 200:
+    steel_armour_stock = 0
+else:
+    steel_armour_stock = 1
+sif_shop = shop([['Steel sword',60,steel_sword_stock],['Steel armour',60,steel_armour_stock],['large health potion (restores 150hp)',50,1],['medium healyh potion (restores 100hp)',30,3]])
+sif_shop.run()
