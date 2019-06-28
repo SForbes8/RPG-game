@@ -36,6 +36,14 @@ class troll(npc):
         self.crit_chance = 5
         self.dmg = 30
 
+class walya(npc):
+    def __init__(self):
+        self.type = 'one and only Walya'
+        self.hp = 300
+        self.hit_chance = 95
+        self.crit_chance = 0
+        self.dmg = 40
+
 class Player:
     def __init__(self):
         self.hp = 100
@@ -353,7 +361,7 @@ print('The town\'s potion maker restores all of your health!')
 player.hp = player.max_hp
 sleep(4)
 #SIDEQUEST - Caravan breakdown
-print('Alas, it is time, you arrive at the City of Osiris.')
+print('\nAlas, it is time, you arrive at the City of Osiris.')
 print('Night is beginning to fall, so there are many ways to proceed:')
 choice = decision(['Sneak in over the rooftops','Go through a back alley','Charge head-on down the street'])
 if choice == 1:
@@ -387,3 +395,30 @@ else:
     steel_armour_stock = 1
 sif_shop = shop([['Steel sword',60,steel_sword_stock],['Steel armour',60,steel_armour_stock],['large health potion (restores 150hp)',50,1],['medium healyh potion (restores 100hp)',30,3]])
 sif_shop.run()
+print('\nYou enter Sif Castle and begin to creep towards the throne room...')
+sleep(4)
+print('\nSuddenly two trolls spot you! You must take care of them before they sound the alarm!')
+battle(troll())
+battle(troll())
+print('\n\nIt is finally time...')
+sleep(4)
+print('You and the soldiers share a look before entering: this will be the toughest fight of your lives...')
+sleep(4)
+print('You enter...')
+sleep(2)
+print('Walya is sitting on the throne. She has been expecting you.')
+sleep(2)
+print('It is time to fight...')
+battle(walya())
+sleep(1)
+print('Walya has been defeated! With her last words, she compliments you on your fighting skills, and says you were a worthy opponent to be beaten by.')
+print('You and your soldiers triumph in victory! You go up to the top of the castle to raise the flag.')
+sleep(5)
+print('\n\nYour quest is complete.\n')
+sleep(3)
+print('The next day, many celebrations are thrown in your troops\' names, the goblins and orcs have fled to a faraway place, and hopefully won\'t be seen again.')
+sleep(5)
+print('You are finally given your medal of bravery, and can now live the rest of your life in peace.')
+sleep(3)
+print('\n\nThe end...')
+input('\n\n\n<To end the game, press enter>
