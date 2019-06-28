@@ -120,7 +120,7 @@ def decision(options,message='What do you choose to do?'):
             if len(options) == 2:
                 return int(input(f'{message} (1/2): '))
             else:
-                return int(input(f'{message} (1-{str(len(options))}:)'))
+                return int(input(f'{message} (1-{str(len(options))}): '))
         except ValueError:
             print('\nInvalid choice\n')
             c = True
@@ -304,8 +304,12 @@ print('You are following the path towards Laton when you come across a large pat
 choice = decision(['Sneak past','Fight them head on','Launch a surprise attack'])
 if choice == 1:
     #Sneak past
-    print('You sneak past and they don\'t notice you!')
-elif choice == 2:
+    if percent_chance(85):
+        print('You sneak past and they don\'t notice you!')
+    else:
+        print('One of them hears you trying to sneak past...')
+        choice = 2
+if choice == 2:
     print('They see you and attack one by one!')
     goblin1 = goblin()
     goblin2 = goblin()
@@ -330,7 +334,7 @@ elif choice == 2:
         print('You pick up the two small health potions, and return to where the patrol was.')
         player.potions += 2
         sleep(4)
-else:
+if choice == 3:
     print('You surprise them and two flee but one stays to fight!')
     goblin1 = goblin()
     battle(goblin1)
@@ -407,8 +411,12 @@ print('\nAlas, it is time, you arrive at the City of Osiris.')
 print('Night is beginning to fall, so there are many ways to proceed:')
 choice = decision(['Sneak in over the rooftops','Go through a back alley','Charge head-on down the street'])
 if choice == 1:
-    print('You sneak in over the rooftops, and make it to a hidden shop outside Sif Castle.')
-elif choice == 2:
+    if percent_chance(75):
+        print('You sneak in over the rooftops, and make it to a hidden shop outside Sif Castle.')
+    else:
+        print('You get seen and are forced to charge down the street instead!')
+        choice = 3
+if choice == 2:
     print('You go through the back alley and encounter a goblin!')
     sleep(2)
     goblin1 = goblin()
@@ -418,7 +426,7 @@ elif choice == 2:
     orc1 = orc()
     battle(orc1)
     print('\nFinally, you make it to a hidden shop outside Sif Castle.')
-else:
+if choice == 3:
     print('You charge down the street and many enemies attack!')
     battle(goblin())
     battle(orc())
@@ -464,4 +472,3 @@ print('You are finally given your medal of bravery, and can now live the rest of
 sleep(3)
 print('\n\nThe end...')
 input('\n\n\n<To end the game, press enter>')
-#
