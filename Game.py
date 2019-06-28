@@ -179,7 +179,8 @@ def battle(enemy):
                     print(f'You dodged successfully and then dealt {damage} damage!')
                 else:
                     print('Your dodge failed...')
-            input('\n')
+            print('\n')
+            sleep(2)
             if not success and enemy.hp > 0:
                 if percent_chance(enemy.hit_chance) or choice == 3:
                     player.damage(enemy.dmg)
@@ -240,16 +241,21 @@ health_potion_type = 'small health potion (restores 50hp)'
 
 print('You are Corde Madine, a noble warrior of the country of Leden.\n')
 print('You are being given an award for your work fighting for your country.')
-input()
+sleep(4)
 print('Suddenly, Walya and her army of goblins attack the city!')
 choice = decision(['Stay and fight','Tell everyone to flee'])
 if choice == 1:
     #Stay and fight
-    '''
-    You fight against a series of goblins, and it is very likely that the player will lose here. If they don't, they continue with a large amount of gold.
-    You escape after 5 battles (option 1) or fight 100 more (option 2). Option 1: You escape to the shelter in Danr.
-    '''
-    pass
+    print('\nYou stay and fight while the civilians flee.')
+    print('The goblin army attacks you!')
+    sleep(3)
+    for u in range(5)
+        battle(goblin())
+    sleep(3)
+    print('You see a window to escape, as this battle appears hopeless.')
+    print('You and your soldiers retreat. The civilians have made a makeshift shelter in the mountains of Danr.')
+    print('However, these conditions are not suitable for too long. You\'re going to take back the city!')
+    sleep(5)
 else:
     #Tell everyone to flee
     print('\nYou see that there are too many of them for the small amount of soldiers you have on hand.')
@@ -258,10 +264,10 @@ else:
     goblin1 = goblin()
     battle(goblin1)
     del goblin1
-    input()
+    sleep(2)
     print('\nIt was a struggle but the citizens got out alive. They\'ve made a makeshift shelter in the mountains of Danr.')
     print('However, these conditions are not suitable for too long. You\'re going to take back the city!')
-    input()
+    sleep(4)
 print('Before you re-infiltrate the city, many of the locals have come to wish you and your soldiers luck.')
 print('The blacksmith comes up to you and offers:')
 choice = decision(['His best armour or','His best sword.'],message='Which option do you choose?')
@@ -271,10 +277,10 @@ if choice == 1:
 else:
     print('You accepted the Iron Sword! Your sword now deals 18 damage!')
     sword_type = 'iron sword'
-input()
+sleep(4)
 player.hp = player.max_hp
 print(f'The local potion maker offers to refill your health! Your hp is now {player.max_hp}!')
-input()
+sleep(4)
 print('\nYou set off towards the city, but plan to stop off at the nearby village of Laton to pick up some supplies.')
 print('You are following the path towards Laton when you come across a large patrol of goblins!')
 choice = decision(['Sneak past','Fight them head on','Launch a surprise attack'])
@@ -287,14 +293,14 @@ elif choice == 2:
     goblin2 = goblin()
     goblin3 = goblin()
     battle(goblin1)
-    input()
+    sleep(4)
     battle(goblin2)
-    input()
+    sleep(2)
     battle(goblin3)
     print('You defeated the patrol!')
     print('The last one dropped something: a piece of paper. It reads: follow the path west for supplies. - Consus the Orc')
     del goblin1,goblin2,goblin3
-    input()
+    sleep(4)
     print('You identify the path: it is slightly hidden on the west side. Do you:')
     choice = decision(['Follow the main path to Laton and ignore the note','Follow the hidden path west'])
     if choice == 2:
@@ -302,15 +308,15 @@ elif choice == 2:
         orc1 = orc()
         print('In the clearing you see an orc protecting two potions. It sees you and immediately battles!')
         battle(orc1)
-        input()
+        sleep(4)
         print('You pick up the two small health potions, and return to where the patrol was.')
         player.potions += 2
-        input()
+        sleep(4)
 else:
     print('You surprise them and two flee but one stays to fight!')
     goblin1 = goblin()
     battle(goblin1)
-    input()
+    sleep(4)
 print('You continue on to Laton village for supplies.')
 #Arrival at Laton Village
 sleep(4)
@@ -393,7 +399,7 @@ if player.max_hp == 200:
     steel_armour_stock = 0
 else:
     steel_armour_stock = 1
-sif_shop = shop([['Steel sword',60,steel_sword_stock],['Steel armour',60,steel_armour_stock],['large health potion (restores 150hp)',50,1],['medium healyh potion (restores 100hp)',30,3]])
+sif_shop = shop([['Steel sword',60,steel_sword_stock],['Steel armour',60,steel_armour_stock],['large health potion (restores 150hp)',50,1],['medium health potion (restores 100hp)',30,3]])
 sif_shop.run()
 print('\nYou enter Sif Castle and begin to creep towards the throne room...')
 sleep(4)
@@ -421,4 +427,4 @@ sleep(5)
 print('You are finally given your medal of bravery, and can now live the rest of your life in peace.')
 sleep(3)
 print('\n\nThe end...')
-input('\n\n\n<To end the game, press enter>
+input('\n\n\n<To end the game, press enter>')
