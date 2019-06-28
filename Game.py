@@ -111,11 +111,13 @@ class shop:
 def decision(options,message='What do you choose to do?'):
     for i in range(len(options)):
         print(f'{i+1}){options[i]}')
-    if len(options) == 2:
-        return int(input(f'{message} (1/2): '))
-    else:
-        return int(input(f'{message} (1-{str(len(options))})'))
-
+    try:
+        if len(options) == 2:
+            return int(input(f'{message} (1/2): '))
+        else:
+            return int(input(f'{message} (1-{str(len(options))})'))
+    except ValueError:
+        print('\nInvalid choice\n')
 def percent_chance(chance):
     x = randint(1,100)
     if chance >= x:
@@ -249,7 +251,7 @@ if choice == 1:
     print('\nYou stay and fight while the civilians flee.')
     print('The goblin army attacks you!')
     sleep(3)
-    for u in range(5)
+    for u in range(5):
         battle(goblin())
     sleep(3)
     print('You see a window to escape, as this battle appears hopeless.')
