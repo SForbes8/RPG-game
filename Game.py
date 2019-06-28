@@ -111,6 +111,7 @@ class shop:
 #Functions
 def decision(options,message='What do you choose to do?'):
     c = True
+    print('\n')
     while c == True:
         c = False
         for i in range(len(options)):
@@ -160,8 +161,12 @@ def battle(enemy):
             print('\n')
             if choice == 1:
                 if percent_chance(player.hit_chance):
-                    enemy.damage(damage)
-                    print(f'You dealt {damage} damage with your {sword_type}!')
+                    if not percent_chance(player.crit_chance):
+                        enemy.damage(damage)
+                        print(f'You dealt {damage} damage with your {sword_type}!')
+                    else:
+                        enemy.damage(damage*1.5)
+                        print(f'Critical hit! You dealt {damage*1.5} damage with your {sword_type}!')
                 else:
                     print('Oops! You missed...')
             elif choice >= 2 and choice <= 4:
@@ -191,8 +196,12 @@ def battle(enemy):
             sleep(2)
             if not success and enemy.hp > 0:
                 if percent_chance(enemy.hit_chance) or choice == 3:
-                    player.damage(enemy.dmg)
-                    print(f'\nThe {enemy.type} hit you and dealt {enemy.dmg} damage!')
+                    if not percent_chance(enemy.crit_chance):
+                        player.damage(enemy.dmg)
+                        print(f'\nThe {enemy.type} hit you and dealt {enemy.dmg} damage.')
+                    else:
+                        player.damage(enemy.dmg*1.5)
+                        print(f'\nThe {enemy.type} got a critical hit and dealt {enemy.dmg*1.5} damage.')
                 else:
                     print(f'\nThe {enemy.type} missed!')
             print('\n')
@@ -249,7 +258,7 @@ sword_type = 'rusty sword'
 health_potion_type = 'small health potion (restores 50hp)'
 
 print('You are Corde Madine, a noble warrior of the country of Leden.\n')
-print('You are being given an award for your work fighting for your country.')
+print('You are being given an award for your work fighting for your country.\n')
 sleep(4)
 print('Suddenly, Walya and her army of goblins attack the city!')
 choice = decision(['Stay and fight','Tell everyone to flee'])
