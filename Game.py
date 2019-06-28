@@ -110,15 +110,19 @@ class shop:
             print('Your sword now deals 27 damage!')
 #Functions
 def decision(options,message='What do you choose to do?'):
-    for i in range(len(options)):
-        print(f'{i+1}){options[i]}\n')
-    try:
-        if len(options) == 2:
-            return int(input(f'{message} (1/2): '))
-        else:
-            return int(input(f'{message} (1-{str(len(options))})'))
-    except ValueError:
-        print('\nInvalid choice\n')
+    c = True
+    while c == True:
+        c = False
+        for i in range(len(options)):
+            print(f'{i+1}){options[i]}\n')
+        try:
+            if len(options) == 2:
+                return int(input(f'{message} (1/2): '))
+            else:
+                return int(input(f'{message} (1-{str(len(options))}:)'))
+        except ValueError:
+            print('\nInvalid choice\n')
+            c = True
 def percent_chance(chance):
     x = randint(1,100)
     if chance >= x:
@@ -234,6 +238,7 @@ def battle(enemy):
                 print('The troll dropped 90 gold!')
                 player.gold += 90
                 print(f'\nYou now have {player.gold} gold!')
+        sleep(3)
 #Imports/Dependencies
 from time import sleep
 from random import randint
@@ -264,7 +269,7 @@ else:
     #Tell everyone to flee
     print('\nYou see that there are too many of them for the small amount of soldiers you have on hand.')
     print('Everyone runs for their lives as you and what\'s left of the other soldiers defend them.')
-    input()
+    sleep(2)
     goblin1 = goblin()
     battle(goblin1)
     del goblin1
@@ -336,8 +341,26 @@ while choice != 3:
     print('There is an Orc guarding the exit to the village. You can:')
     choice = decision(['Look around','Visit the shop','Fight the orc to leave'])
     if choice == 1:
-        #Sidequests - NOT MVP
-        pass
+        print('There are two routes you can take up ahead:')
+        choice2 = decision(['Go west','Go east'])
+        if choice2 == 1: #West - Old man
+            print('\nThere is an old man looking unhappy. He says:')
+            print('\n"That park over there was my childhood... but now is overrun by goblins. If you clear them, I will give you 20 gold."')
+            choice3 = decision(['Clear the park of goblins','Return to the centre of the village'])
+            if choice3 == 1:
+                battle(goblin())
+                battle(goblin())
+                battle(goblin())
+                sleep(3)
+                print('You look around you, and realise how beautiful the park really is.')
+                print('You return to the old man, who thanks you and gives you 20 gold!')
+                player.gold += 20
+                print(f'\nYou now have {player.gold} gold!')
+        else:
+            print('There was a goblin at a dead-end!')
+            battle(goblin())
+            sleep(3)
+            print('You return to the village centre.')
     elif choice == 2:
         laton_shop.run()
 print('You approach the orc protecting the exit to Laton Village. It sees you and immediately attacks!')
