@@ -1,0 +1,28 @@
+Laton Village
+
+LATON SHOP
+
+Small Health Potion - 20 gold (50hp) [Limit 2]
+
+Medium Health Potion - 30 gold (100hp) [Limit 1]
+
+Iron (NOT YET GOT) - 50 gold (18dmg/150hp)[Limit 1]
+
+SIDE QUESTS
+
+Accessed from the 'Ask around' option, then east or west.
+
+1) WEST - Old Man Quest "Park overrun by orcs, get rid of them for 20 gold."
+
+2) EAST - One goblin in a dark alleyway - battle and return
+
+MAIN QUEST
+
+1) Enter Laton Village (Main story progresses by entering the village)
+
+2) Battle the Orc (After the player is happy with the side-quests that they have done, they can battle the Orc that
+is blocking the exit to Laton Village and proceed towards the main city.)
+
+3) Continue to the city (The player can return to the shop but not the village to do side quests)
+
+4) 
